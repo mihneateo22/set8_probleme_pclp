@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<string.h>
+#include<stdbool.h>
 
 typedef struct
 {
@@ -7,6 +8,7 @@ typedef struct
     int nota1;
     int nota2;
     int nota3;
+    float medie;
 }student;
 
 int get_grade(student s, int materie)
@@ -19,8 +21,10 @@ int get_grade(student s, int materie)
 int main()
 {
     student array1[6];
-    char subpunct, name[30];
-    int i, j, contor, materie1_2_sau3, maxi = 0;
+    student top[6];
+    char subpunct, name[30], temp_char[30];
+    int i, j, contor, materie1_2_sau3, maxi = 0, cnt_aparitii = 0, temp;
+    bool flag = false;
     //rezolvare subpunct a)
     printf("introduceti numarul de studenti : ");
     scanf("%d", &contor);
@@ -30,13 +34,13 @@ int main()
         scanf("%s", array1[i].nume);
         getchar();
     }
-    printf("introduceti nota1 tuturor elevilor :");
+    printf("introduceti nota1 tuturor elevilor : ");
     for(i = 0; i < contor; i++)
         scanf("%d", &array1[i].nota1);
-    printf("introduceti nota2 tuturor elevilor :");
+    printf("introduceti nota2 tuturor elevilor : ");
     for(i = 0; i < contor; i++)
         scanf("%d", &array1[i].nota2);
-    printf("introduceti nota3 tuturor elevilor :");
+    printf("introduceti nota3 tuturor elevilor : ");
     for(i = 0; i < contor; i++)
         scanf("%d", &array1[i].nota3);
     printf("\n");
@@ -64,7 +68,6 @@ int main()
             }
             break;
         case 'c' :
-            student top[6];
             int k = 0;
             printf("introduceti nateria de comparatie : ");
             scanf("%d", &materie1_2_sau3);
@@ -103,16 +106,50 @@ int main()
             else printf("elevul cu nota maxima este %s\n", top[0].nume);
             break;
         case 'd' :
-            student medie;
             for(i = 0; i < contor; i++)
             {
-                medie.nota1 = array1[i].nota1;
-                medie.nota2 = array1[i].nota2;
-                medie.nota3 = array1[i].nota3;
+                array1[i].medie = (float)(array1[i].nota1 + array1[i].nota2 + array1[i].nota3) / 3.0;
             }
+            for(i = 0; i < contor; i++)
+            {
+                if(array1[i].medie > maxi)
+                {
+                    maxi = array1[i].medie;
+                    cnt_aparitii++;
+                }
+            }
+            printf("premianti : ");
+            for(i = 0; i < contor; i++)
+                if(array1[i].medie == maxi)
+                    printf("%s ", array1[i].nume);
+            printf("\n");
             break;
         case 'e' :
+            for(i = 0; i < contor - 1; i++)
+                for(j = i + 1; j < contor; j++)
+                    if(array1[i].nota2 < array1[j].nota2)
+                    {
+                        student temp = array1[i];
+                        array1[i] = array1[j];
+                        array1[j] = temp;
+                    }
+            printf("Afisare dupa sortare descrescatoare dupa nota2:\n");
+            for(i = 0; i < contor; i++)
+                printf("%s %d %d %d\n", array1[i].nume, array1[i].nota1, array1[i].nota2,array1[i].nota3);
+            break;
         case 'f' :
+            for(i = 0; i < contor; i++)
+            {
+                array1[i].medie = (float)(array1[i].nota1 + array1[i].nota2 + array1[i].nota3) / 3.0;
+            }
+            printf("nepromovati la cel putin o materie : ");
+            for(i = 0; i < contor; i++)
+            {
+                if(array1[i].medie < 5.00)
+                    printf("%s ", array1[i]. nume);
+            }
+            printf("\n");
+            break;
         default :
             printf("mai incearca inca o data. variantele sunt de la b la f : ");
             break;
