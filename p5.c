@@ -48,7 +48,7 @@ int main()
             printf("introduceti raza cercului : ");
             scanf("%d", &figura1.raza);
             perimetru = (float)(2 * M_PI * figura1.raza);
-            printf("perimetru cercului este : %f\n", perimetru);
+            printf("perimetru cercului este : %.2f\n", perimetru);
             break;
         case 'p' :
             printf("introduceti lungimea laturii : ");
