@@ -16,42 +16,49 @@ typedef struct
     }autor;
 }carte;
 
-void citire_struct(unsigned int *n, carte v[]);
-void cautare_autor(unsigned int *n, carte v[], char nume_autor[], char prenume_autor[]);
+void citire_struct(unsigned int (*n), carte v[]); // subpunct a)
+void citire_autor(char nume_autor[], char prenume_autor[]);
+
+//subpunct b)
+void cautare_autor(unsigned int (*n), carte v[], char nume_autor[], char prenume_autor[]);
 void afisare_info_carte(unsigned int i, carte v[]);
+
+//subpunct c)
+void max_carti(unsigned int (*n), carte v[], char nume_max[], char prenume_max[]);
 
 int main()
 {
     carte v[10];
     unsigned int n;
-    char nume_autor[20], prenume_autor[20];
+    char nume_autor[20], prenume_autor[20], nume_max[20], prenume_max[20];
     citire_struct(&n, v);
     cautare_autor(&n, v, nume_autor, prenume_autor);
+    max_carti(&n, v, nume_max, prenume_max);
     return 0;
 }
 
-void citire_struct(unsigned int *n, carte v[])
+void citire_struct(unsigned int (*n), carte v[])
 {
     unsigned int i;
     printf("introduceti numarul de elemnete din tablou : ");
     scanf("%d", n);
     getchar();
     printf("introduceti titlul cartilor : \n");
-    for(i = 0; i < *n; i++)
+    for(i = 0; i < (*n); i++)
     {
         printf("introduceti titlul cartii %u : ", i + 1);
         fgets(v[i].titlu, 50, stdin);
         v[i].titlu[strcspn(v[i].titlu, "\n")] = '\0';
     }
     printf("introduecti anul publicatie pentru fiecare carte : \n");
-    for(i = 0; i < *n; i++)
+    for(i = 0; i < (*n); i++)
     {
         printf("anul publicatie cartii %u : ", i + 1);
         scanf("%d", &v[i].an);
     }
     getchar();
     printf("introduceti numele complet al autorului : \n");
-    for(i = 0; i < *n; i++)
+    for(i = 0; i < (*n); i++)
     {
         printf("nume autor %u : ", i + 1);
         fgets(v[i].autor.nume, 20, stdin);
@@ -61,12 +68,22 @@ void citire_struct(unsigned int *n, carte v[])
         v[i].autor.prenume[strcspn(v[i].autor.prenume, "\n")] = '\0';    
     }
     printf("genul abordat : \n");
-    for(i = 0; i < *n; i++)
+    for(i = 0; i < (*n); i++)
     {
         printf("gen autor %u : ", i + 1);
         scanf("%c", &v[i].autor.gen);
         getchar();
     }
+}
+
+void citire_autor(char nume_autor[], char prenume_autor[])
+{
+    printf("numele autorului de cautat : ");
+    fgets(nume_autor, 20, stdin);
+    nume_autor[strcspn(nume_autor, "\n")] = '\0';
+    printf("prenumele autorului de cautat : ");
+    fgets(prenume_autor, 20, stdin);
+    prenume_autor[strcspn(prenume_autor, "\n")] = '\0';
 }
 
 void afisare_info_carte(unsigned int i, carte v[])
@@ -76,18 +93,38 @@ void afisare_info_carte(unsigned int i, carte v[])
     printf("anul publicatie : %u\n", v[i].an);
 }
 
-void cautare_autor(unsigned int *n, carte v[], char nume_autor[], char prenume_autor[])
+void cautare_autor(unsigned int (*n), carte v[], char nume_autor[], char prenume_autor[])
 {
     unsigned int i;
-    printf("numele autorului de cautat : ");
-    fgets(nume_autor, 20, stdin);
-    nume_autor[strcspn(nume_autor, "\n")] = '\0';
-    printf("prenumele autorului de cautat : ");
-    fgets(prenume_autor, 20, stdin);
-    prenume_autor[strcspn(prenume_autor, "\n")] = '\0';
-    for(i = 0; i < *n; i++)
+    citire_autor(nume_autor, prenume_autor);
+    for(i = 0; i < (*n); i++)
     {
         if(strcmp(nume_autor, v[i].autor.nume) == 0 && strcmp(prenume_autor, v[i].autor.prenume) == 0)
             afisare_info_carte(i, v);
     }
+}
+
+void max_carti(unsigned int (*n), carte v[], char nume_max[], char prenume_max[])
+{
+    unsigned int i, j, cnt, maxi = 0;
+    for(i = 0; i < (*n) - 1; i++)
+    {
+        cnt = 1;
+        for(j = i + 1; j < (*n); j++)
+        {
+            if(strcmp(v[i].autor.nume, v[j].autor.nume) == 0 && strcmp(v[i].autor.prenume, v[j].autor.prenume) == 0)
+                cnt++;
+        }
+        if(cnt > maxi)
+        {
+            maxi = cnt;
+            strcpy(nume_max, v[i].autor.nume);
+            strcpy(prenume_max, v[i].autor.prenume);
+        }
+    }
+    printf("AUTORUL CU CELE MAI MULTE CARTI : \n");
+    printf("nume : ");
+    puts(nume_max);
+    printf("prenume : ");
+    puts(prenume_max);
 }
