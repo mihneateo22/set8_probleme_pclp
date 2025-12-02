@@ -26,14 +26,18 @@ void afisare_info_carte(unsigned int i, carte v[]);
 //subpunct c)
 void max_carti(unsigned int (*n), carte v[], char nume_max[], char prenume_max[]);
 
+//subpunct d)
+void same_year(unsigned int *n, carte v[]);
+
 int main()
 {
     carte v[10];
     unsigned int n;
     char nume_autor[20], prenume_autor[20], nume_max[20], prenume_max[20];
     citire_struct(&n, v);
-    cautare_autor(&n, v, nume_autor, prenume_autor);
-    max_carti(&n, v, nume_max, prenume_max);
+    // cautare_autor(&n, v, nume_autor, prenume_autor);
+    // max_carti(&n, v, nume_max, prenume_max);
+    same_year(&n, v);
     return 0;
 }
 
@@ -127,4 +131,15 @@ void max_carti(unsigned int (*n), carte v[], char nume_max[], char prenume_max[]
     puts(nume_max);
     printf("prenume : ");
     puts(prenume_max);
+}
+
+void same_year(unsigned int *n, carte v[])
+{
+    unsigned int i, j;
+    for(i = 0; i < (*n) - 1; i++)
+    {
+        for(j = i + 1; j < (*n); j++)
+            if((v[i].an == v[j]. an) && (v[i].autor.gen == v[j].autor.gen))
+                printf("carti publicate in acelasi an : %u si %u\n", i + 1, j + 1);
+    }
 }
