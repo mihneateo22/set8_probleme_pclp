@@ -16,18 +16,22 @@ typedef struct
     }autor;
 }carte;
 
-void citire_struct(unsigned int (*n), carte v[]); // subpunct a)
+void citire_struct(unsigned int *n, carte v[]); // subpunct a)
 void citire_autor(char nume_autor[], char prenume_autor[]);
 
 //subpunct b)
-void cautare_autor(unsigned int (*n), carte v[], char nume_autor[], char prenume_autor[]);
+void cautare_autor(unsigned int *n, carte v[], char nume_autor[], char prenume_autor[]);
 void afisare_info_carte(unsigned int i, carte v[]);
 
 //subpunct c)
-void max_carti(unsigned int (*n), carte v[], char nume_max[], char prenume_max[]);
+void max_carti(unsigned int *n, carte v[], char nume_max[], char prenume_max[]);
 
 //subpunct d)
 void same_year(unsigned int *n, carte v[]);
+
+//subpunctul e)
+void ord_carti(unsigned int *n, carte v[]);
+void afisare_info_total(unsigned int *n, carte v[]);
 
 int main()
 {
@@ -37,11 +41,13 @@ int main()
     citire_struct(&n, v);
     // cautare_autor(&n, v, nume_autor, prenume_autor);
     // max_carti(&n, v, nume_max, prenume_max);
-    same_year(&n, v);
+    // same_year(&n, v);
+    ord_carti(&n, v);
+    afisare_info_total(&n, v);
     return 0;
 }
 
-void citire_struct(unsigned int (*n), carte v[])
+void citire_struct(unsigned int *n, carte v[])
 {
     unsigned int i;
     printf("introduceti numarul de elemnete din tablou : ");
@@ -142,4 +148,40 @@ void same_year(unsigned int *n, carte v[])
             if((v[i].an == v[j]. an) && (v[i].autor.gen == v[j].autor.gen))
                 printf("carti publicate in acelasi an : %u si %u\n", i + 1, j + 1);
     }
+}
+
+void afisare_info_total(unsigned int *n, carte v[])
+{
+    unsigned int i;
+    printf("titlul cartilor : \n");
+    for(i = 0; i < (*n); i++)
+    {
+        printf("tilu carte %u : ", i + 1);
+        puts(v[i].titlu);
+    }
+    printf("numele autorilor : \n");
+    for(i = 0; i < (*n); i++)
+    {
+        printf("nume autor %u : ", i + 1);
+        puts(v[i].autor.nume);
+        printf("prenume autor %u : ", i + 1);
+        puts(v[i].autor.prenume);
+    }
+    printf("anul publicatie : \n");
+    for(i = 0; i < (*n); i++)
+        printf("an publicatie carte %u : %u\n", i + 1, v[i].an);
+}
+
+void ord_carti(unsigned int *n, carte v[])
+{
+    carte temp;
+    unsigned int i, j;
+    for(i = 0; i < (*n) - 1; i++)
+        for(j = i + 1; j < (*n); j++)
+            if(strcmp(v[i].titlu, v[j].titlu) > 0)
+            {
+                temp = v[i];
+                v[i] = v[j];
+                v[j] = temp;
+            }
 }
